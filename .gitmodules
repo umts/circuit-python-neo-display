@@ -1,0 +1,3 @@
+[submodule "Adafruit_CircuitPython_PIOASM"]
+	path = Adafruit_CircuitPython_PIOASM
+	url = https://github.com/adafruit/Adafruit_CircuitPython_PIOASM.git
