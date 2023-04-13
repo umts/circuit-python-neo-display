@@ -1,3 +1,9 @@
 [submodule "Adafruit_CircuitPython_PIOASM"]
 	path = Adafruit_CircuitPython_PIOASM
 	url = https://github.com/adafruit/Adafruit_CircuitPython_PIOASM.git
+[submodule "Adafruit_CircuitPython_Pixel_Framebuf"]
+	path = Adafruit_CircuitPython_Pixel_Framebuf
+	url = https://github.com/adafruit/Adafruit_CircuitPython_Pixel_Framebuf.git
+[submodule "Adafruit_CircuitPython_framebuf"]
+	path = Adafruit_CircuitPython_framebuf
+	url = https://github.com/adafruit/Adafruit_CircuitPython_framebuf.git
