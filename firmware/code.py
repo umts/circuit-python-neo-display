@@ -33,6 +33,46 @@ def data_frame_to_int(byte):
 displays = [map_pixels(i) for i in range(NUM_DISPLAYS)]
 frame_bufs = [frame_buf(displays[i]) for i in range(NUM_DISPLAYS)]
 
+digit_pixel_map = {
+  0: { 0: [0,1,2,3,4,5,6], 1: [0,4,6], 2: [0,3,6], 3: [0,1,2,3,4,5,6] },
+  # 1: { 0: [], 1: [1,6], 2: [0,1,2,3,4,5,6], 3: [6] },
+  1: {0: [], 1: [], 2: [], 3: [0,1,2,3,4,5,6]},
+  2: { 0: [0,3,4,5,6], 1: [0,3,6], 2: [0,3,6], 3: [0,1,2,3,6] },
+  3: { 0: [0,3,6], 1: [0,3,6], 2: [0,3,6], 3: [0,1,2,3,4,5,6] },
+  4: { 0: [0,1,2,3], 1: [3], 2: [3], 3: [0,1,2,3,4,5,6] },
+  5: { 0: [0,1,2,3,6], 1: [0,3,6], 2: [0,3,6], 3: [0,3,4,5,6] },
+  6: { 0: [0,1,2,3,4,5,6], 1: [0,3,6], 2: [0,3,6], 3: [0,3,4,5,6] },
+  7: { 0: [0], 1: [0], 2: [0], 3: [0,1,2,3,4,5,6] },
+  8: { 0: [0,1,2,3,4,5,6], 1: [0,3,6], 2: [0,3,6], 3: [0,1,2,3,4,5,6] },
+  9: { 0: [0,1,2,3,6], 1: [0,3,6], 2: [0,3,6], 3: [0,1,2,3,4,5,6] }
+}
+
+frame_buf_color_map = {
+  0: 0x7E0A6D,
+  1: 0x00467E,
+  2: 0x00467E,
+  3: 0x00467E,
+  4: 0xFF0000
+}
+
+def custom_num(buf_num, digit, offset):
+  for x in range(4):
+    for y in digit_pixel_map[digit][x]:
+      frame_bufs[buf_num].pixel((x + 1 + offset), y, frame_buf_color_map[buf_num])
+
+def display_custom_num(buf_num, num):
+  if num > 999:
+    frame_bufs[buf_num].fill(0)
+  elif num > 99:
+    custom_num(buf_num, num % 10, 10)
+    custom_num(buf_num, num // 10**1 % 10, 5)
+    custom_num(buf_num, num // 10**2 % 10, 0)
+  elif num > 9:
+    custom_num(buf_num, num % 10, 7)
+    custom_num(buf_num, num // 10**1 % 10, 2)
+  else:
+    custom_num(buf_num, num, 4)
+
 while True:
   uart.reset_input_buffer()
   recv_buf = uart.read(NUM_DISPLAYS * 2)
