@@ -35,8 +35,7 @@ frame_bufs = [frame_buf(displays[i]) for i in range(NUM_DISPLAYS)]
 
 digit_pixel_map = {
   0: { 0: [0,1,2,3,4,5,6], 1: [0,4,6], 2: [0,3,6], 3: [0,1,2,3,4,5,6] },
-  # 1: { 0: [], 1: [1,6], 2: [0,1,2,3,4,5,6], 3: [6] },
-  1: {0: [], 1: [], 2: [], 3: [0,1,2,3,4,5,6]},
+  1: { 0: [], 1: [1,6], 2: [0,1,2,3,4,5,6], 3: [6] },
   2: { 0: [0,3,4,5,6], 1: [0,3,6], 2: [0,3,6], 3: [0,1,2,3,6] },
   3: { 0: [0,3,6], 1: [0,3,6], 2: [0,3,6], 3: [0,1,2,3,4,5,6] },
   4: { 0: [0,1,2,3], 1: [3], 2: [3], 3: [0,1,2,3,4,5,6] },
@@ -52,7 +51,8 @@ frame_buf_color_map = {
   1: 0x00467E,
   2: 0x00467E,
   3: 0x00467E,
-  4: 0xFF0000
+  4: 0xFF0000,
+  5: 0
 }
 
 def custom_num(buf_num, digit, offset):
@@ -65,11 +65,11 @@ def display_custom_num(buf_num, num):
     frame_bufs[buf_num].fill(0)
   elif num > 99:
     custom_num(buf_num, num % 10, 10)
-    custom_num(buf_num, num // 10**1 % 10, 5)
-    custom_num(buf_num, num // 10**2 % 10, 0)
+    custom_num(buf_num, num // 10 % 10, 5)
+    custom_num(buf_num, num // 100 % 10, 0)
   elif num > 9:
     custom_num(buf_num, num % 10, 7)
-    custom_num(buf_num, num // 10**1 % 10, 2)
+    custom_num(buf_num, num // 10 % 100, 2)
   else:
     custom_num(buf_num, num, 4)
 
@@ -83,14 +83,7 @@ while True:
     for i, data_frame in enumerate(data_frames):
       print(str(i), '->', str(data_frame))
       frame_bufs[i].fill(0)
-      if data_frame < 10:
-        frame_bufs[i].text(str(data_frame), 5, 0, 0x00467E)
-      elif data_frame < 100:
-        frame_bufs[i].text(str(data_frame), 2, 0, 0x00467E)
-      elif data_frame > 999:
-        frame_bufs[i].fill(0)
-      else:
-        frame_bufs[i].text(str(data_frame), 0, 0, 0x00467E)
+      display_custom_num(i, data_frame)
       frame_bufs[i].display()
 
 PIXELS.deinit()
